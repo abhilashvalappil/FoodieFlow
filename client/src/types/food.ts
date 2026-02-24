@@ -5,3 +5,7 @@ export interface FoodItem {
     price: number;
     image: string;
 }
+
+export interface CartItem extends FoodItem {
+    quantity: number;
+}

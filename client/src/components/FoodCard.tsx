@@ -15,9 +15,6 @@ const FoodCard: React.FC<FoodCardProps> = ({ item, onAddToCart }) => {
                     alt={item.name}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 />
-                <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-2.5 py-1 rounded-full text-xs font-semibold text-orange-600 shadow-sm">
-                    {item.category}
-                </div>
             </div>
 
             <div className="p-5 flex flex-col flex-grow">
