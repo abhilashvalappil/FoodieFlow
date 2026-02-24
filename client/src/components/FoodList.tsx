@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import FoodCard from './FoodCard';
+import Cart from './Cart';
 import type { FoodItem } from '../types/food';
 import { fetchItems } from '../api/service';
 
@@ -64,20 +65,28 @@ const FoodList: React.FC = () => {
                 </div>
             </div>
 
-            {foodItems.length === 0 ? (
-                <div className="text-center py-20 text-slate-400">
-                    <p>No food items found. Add some to get started!</p>
+            <div className="flex flex-col lg:flex-row gap-10 items-start">
+                <div className="flex-grow">
+                    {foodItems.length === 0 ? (
+                        <div className="text-center py-20 text-slate-400">
+                            <p>No food items found. Add some to get started!</p>
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                            {foodItems.map((item) => (
+                                <FoodCard
+                                    key={item.id}
+                                    item={item}
+                                />
+                            ))}
+                        </div>
+                    )}
                 </div>
-            ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {foodItems.map((item) => (
-                        <FoodCard
-                            key={item.id}
-                            item={item}
-                        />
-                    ))}
+
+                <div className="w-full lg:w-[400px] sticky top-8">
+                    <Cart />
                 </div>
-            )}
+            </div>
         </div>
     );
 };

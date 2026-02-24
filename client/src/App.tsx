@@ -1,10 +1,14 @@
+import React from 'react';
 import { BrowserRouter } from 'react-router-dom'
 import UserRoutes from './routes/userRoutes'
+import { CartProvider } from './context/CartContext'
 
 const App: React.FC = () => {
   return (
     <BrowserRouter>
-      <UserRoutes />
+      <CartProvider>
+        <UserRoutes />
+      </CartProvider>
     </BrowserRouter>
   )
 }
