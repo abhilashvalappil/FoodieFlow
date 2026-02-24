@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import FoodCard from './FoodCard';
 import Cart from './Cart';
 import type { FoodItem } from '../types/food';
-import { fetchItems } from '../api/service';
+import { getMenu } from '../api/service';
 
 const FoodList: React.FC = () => {
     const [foodItems, setFoodItems] = useState<FoodItem[]>([]);
@@ -12,7 +12,7 @@ const FoodList: React.FC = () => {
     useEffect(() => {
         const fetchMenu = async () => {
             try {
-                const response = await fetchItems();
+                const response = await getMenu();
                 const items = response.map((item: any) => ({
                     ...item,
                     id: item._id,

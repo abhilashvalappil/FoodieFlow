@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { useCart } from '../context/CartContext';
+import { useNavigate } from 'react-router-dom';
 
 const Cart: React.FC = () => {
     const { cartItems, removeFromCart, updateQuantity, cartTotal, clearCart, cartCount } = useCart();
     const [isCollapsed, setIsCollapsed] = useState(false);
+    const navigate = useNavigate();
 
     if (cartItems.length === 0) {
         return (
@@ -116,7 +118,10 @@ const Cart: React.FC = () => {
                         </div>
                     </div>
 
-                    <button className="group w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 rounded-2xl shadow-[0_10px_20px_-10px_rgba(249,115,22,0.5)] transition-all duration-300 active:scale-[0.98] flex items-center justify-center gap-3">
+                    <button
+                        onClick={() => navigate('/checkout')}
+                        className="group w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 rounded-2xl shadow-[0_10px_20px_-10px_rgba(249,115,22,0.5)] transition-all duration-300 active:scale-[0.98] flex items-center justify-center gap-3"
+                    >
                         <span>Checkout Now</span>
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
