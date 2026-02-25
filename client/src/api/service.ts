@@ -15,7 +15,6 @@ export const getMenu = async(): Promise<FoodItem[]> => {
 export const createOrder = async (orderData: any) => {
     try {
         const response = await API.post('/api/orders', orderData);
-        console.log(response)
         return response.data;
     } catch (error) {
         console.error('Error creating order:', error);

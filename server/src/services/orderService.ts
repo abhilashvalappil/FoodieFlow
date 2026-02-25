@@ -1,4 +1,4 @@
-
+import mongoose from 'mongoose';
 import type { IOrder } from "../interfaces/entities/orderInterface.js";
 import type { IOrderService } from "../interfaces/serviceInterfaces/IOrderService.js";
 import Order from "../models/orderModel.js";
@@ -19,11 +19,12 @@ export class OrderService implements IOrderService {
 
     private simulateStatusUpdates(orderId: string) {
         const statuses = ["Preparing", "Out for Delivery", "Delivered"];
-        let delay = 3000;  
+        let delay = 3000;
 
         statuses.forEach((status, index) => {
             setTimeout(async () => {
                 try {
+                    if (mongoose.connection.readyState !== 1) return;
                     await Order.findByIdAndUpdate(orderId, { status });
                 } catch (error) {
                     console.error(`Failed to update status for order ${orderId}:`, error);

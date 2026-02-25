@@ -132,7 +132,7 @@ npm test
 
 ```
 
-Areas covered:
+### Areas covered:
 - Order creation validation
 - Input validation
 - Status update simulation

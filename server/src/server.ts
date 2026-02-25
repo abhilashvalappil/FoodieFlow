@@ -27,19 +27,21 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/api', router);
 
+if (process.env.NODE_ENV !== 'test') {
+    if (!mongoUrl) {
+        console.error("MONGO_URL is not defined in environment variables");
+        process.exit(1);
+    }
 
-if (!mongoUrl) {
-    console.error("MONGO_URL is not defined in environment variables");
-    process.exit(1);
+    mongoose
+        .connect(mongoUrl as string)
+        .then(() => console.log("MongoDB connected"))
+        .catch((err) => console.error("MongoDB connection error:", err));
+
+    const PORT = process.env.PORT || 3000;
+    server.listen(PORT, () => console.log(`Server running on port http://localhost:${PORT}`));
+} else {
+    console.log('Server is in TEST mode, skipping direct listen.');
 }
-
-mongoose
-    .connect(mongoUrl as string)
-    .then(() => console.log("MongoDB connected"))
-    .catch((err) => console.error("MongoDB connection error:", err));
-
-
-const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => console.log(`Server running on port http://localhost:${PORT}`));
 
 export default app;
