@@ -3,8 +3,6 @@ import type { IMenuService } from "../interfaces/serviceInterfaces/IMenuService.
 import Menu from "../models/menuModel.js";
 
 export class MenuService implements IMenuService {
-    constructor(){
-    }
     async getMenu(): Promise<IMenu[]>{
         const menuItems = await Menu.find().sort({ createdAt: -1 });
         return menuItems;

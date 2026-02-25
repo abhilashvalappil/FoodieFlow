@@ -5,7 +5,6 @@ import Order from "../models/orderModel.js";
 import type { CreateOrderInput } from "../schemas/orderSchema.js";
 
 export class OrderService implements IOrderService {
-    constructor(){}
 
     async createOrder(orderData: CreateOrderInput): Promise<IOrder> {
         const order = new Order(orderData);
