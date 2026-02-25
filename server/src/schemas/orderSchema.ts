@@ -8,7 +8,7 @@ export const createOrderSchema = z.object({
     phoneNumber: z
       .number()
       .int()
-      .refine((val) => val.toString().length >= 10, {
+      .refine((val: number) => val.toString().length >= 10, {
         message: "Phone number must be at least 10 digits",
       }),
   }),
