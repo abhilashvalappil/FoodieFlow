@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 import http from "http";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
-import router from './routes/userRoutes.js';
+import router from './routes/orderRoutes.js';
 
 dotenv.config();
 
