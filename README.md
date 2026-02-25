@@ -8,8 +8,8 @@ This project demonstrates clean architecture, REST API design, validation (front
 
 ## 🚀 Live Demo
 
-Frontend: [Add your deployed frontend URL]  
-Backend API: [Add your deployed backend URL]
+Frontend: https://foodie-flow-murex.vercel.app
+Backend API: https://foodieflow-58eu.onrender.com
 
 ---
 
@@ -114,6 +114,23 @@ client/
 ## 🧪 Test-Driven Development
 
 The project follows structured validation and separation of concerns to enable testability.
+
+### 🧪 Running Tests
+
+#### Backend Tests (Node.js/Jest)
+Covers API endpoints, validation logic, and order status simulation.
+```powershell
+# Navigate to server directory and run:
+$env:NODE_OPTIONS="--experimental-vm-modules"; $env:NODE_ENV="test"; npm test
+```
+
+#### Frontend Tests (React/Vitest)
+Covers UI components, form validation, and user flows.
+```powershell
+# Navigate to client directory and run:
+npm test
+
+```
 
 Areas covered:
 - Order creation validation
