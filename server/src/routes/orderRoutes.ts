@@ -6,6 +6,8 @@ import { MenuService } from '../services/menuService.js';
 import { MenuController } from '../controllers/menuController.js';
 import { OrderService } from '../services/orderService.js';
 import { OrderController } from '../controllers/orderController.js';
+import { validate } from '../middleware/orderValidate.js';
+import { createOrderSchema } from '../schemas/orderSchema.js';
 
 const router = express.Router();
 const upload = multer({ storage });
@@ -17,7 +19,7 @@ const orderController = new OrderController(orderService)
 
 router.get('/menu', menuController.getMenu.bind(menuController))
 router.post('/menu', upload.single('image'), menuController.addMenu.bind(menuController))
-router.post('/orders', orderController.createOrder.bind(orderController))
+router.post('/orders',validate(createOrderSchema), orderController.createOrder.bind(orderController))
 router.get('/orders/:id', orderController.getOrder.bind(orderController))
 
 export default router;
