@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import FoodCard from './FoodCard';
+import Cart from './Cart';
 import type { FoodItem } from '../types/food';
-import { fetchItems } from '../api/service';
+import { getMenu } from '../api/service';
 
 const FoodList: React.FC = () => {
     const [foodItems, setFoodItems] = useState<FoodItem[]>([]);
@@ -11,7 +12,7 @@ const FoodList: React.FC = () => {
     useEffect(() => {
         const fetchMenu = async () => {
             try {
-                const response = await fetchItems();
+                const response = await getMenu();
                 const items = response.map((item: any) => ({
                     ...item,
                     id: item._id,
@@ -49,35 +50,30 @@ const FoodList: React.FC = () => {
                         Hand-picked delicacies prepared with fresh ingredients and love by our world-class chefs.
                     </p>
                 </div>
-                <div className="flex gap-2 flex-wrap">
-                    {['All', 'Pizza', 'Burgers', 'Sushi', 'Main Course', 'Pasta', 'Salads', 'Appetizers', 'Desserts'].map((cat) => (
-                        <button
-                            key={cat}
-                            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${cat === 'All'
-                                ? 'bg-orange-600 text-white'
-                                : 'bg-white text-slate-600 hover:bg-orange-50 hover:text-orange-600'
-                                }`}
-                        >
-                            {cat}
-                        </button>
-                    ))}
-                </div>
             </div>
 
-            {foodItems.length === 0 ? (
-                <div className="text-center py-20 text-slate-400">
-                    <p>No food items found. Add some to get started!</p>
+            <div className="flex flex-col lg:flex-row gap-10 items-start">
+                <div className="flex-grow">
+                    {foodItems.length === 0 ? (
+                        <div className="text-center py-20 text-slate-400">
+                            <p>No food items found. Add some to get started!</p>
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                            {foodItems.map((item) => (
+                                <FoodCard
+                                    key={item.id}
+                                    item={item}
+                                />
+                            ))}
+                        </div>
+                    )}
                 </div>
-            ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {foodItems.map((item) => (
-                        <FoodCard
-                            key={item.id}
-                            item={item}
-                        />
-                    ))}
+
+                <div className="w-full lg:w-[400px] sticky top-8">
+                    <Cart />
                 </div>
-            )}
+            </div>
         </div>
     );
 };

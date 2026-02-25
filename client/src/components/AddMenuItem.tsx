@@ -82,10 +82,12 @@ const AddMenuItem: React.FC = () => {
                     />
                 </div>
                 <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">Price ($)</label>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">Price (₹)</label>
                     <input
                         type="number"
-                        step="0.01"
+                        step="1"
+                        min="100"
+                        max="1000"
                         value={price}
                         onChange={(e) => setPrice(e.target.value)}
                         className="w-full px-4 py-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none transition-all"

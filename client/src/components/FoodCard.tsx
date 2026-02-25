@@ -1,12 +1,13 @@
 import React from 'react';
 import type { FoodItem } from '../types/food';
+import { useCart } from '../context/CartContext';
 
 interface FoodCardProps {
     item: FoodItem;
-    onAddToCart?: (item: FoodItem) => void;
 }
 
-const FoodCard: React.FC<FoodCardProps> = ({ item, onAddToCart }) => {
+const FoodCard: React.FC<FoodCardProps> = ({ item }) => {
+    const { addToCart } = useCart();
     return (
         <div className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 flex flex-col h-full">
             <div className="relative h-48 overflow-hidden">
@@ -20,7 +21,7 @@ const FoodCard: React.FC<FoodCardProps> = ({ item, onAddToCart }) => {
             <div className="p-5 flex flex-col flex-grow">
                 <div className="flex justify-between items-start mb-2">
                     <h3 className="text-lg font-bold text-slate-800">{item.name}</h3>
-                    <span className="text-lg font-bold text-orange-600">${item.price.toFixed(2)}</span>
+                    <span className="text-lg font-bold text-orange-600">₹{item.price}</span>
                 </div>
 
                 <p className="text-slate-500 text-sm mb-6 flex-grow line-clamp-2">
@@ -28,7 +29,7 @@ const FoodCard: React.FC<FoodCardProps> = ({ item, onAddToCart }) => {
                 </p>
 
                 <button
-                    onClick={() => onAddToCart?.(item)}
+                    onClick={() => addToCart(item)}
                     className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 rounded-xl transition-colors duration-200 flex items-center justify-center gap-2 group/btn"
                 >
                     <span>Add to Cart</span>
