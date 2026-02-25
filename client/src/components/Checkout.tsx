@@ -2,42 +2,44 @@ import React, { useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
 import { createOrder } from '../api/service';
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { checkoutSchema } from '../validations/checkoutSchema';
+import type { CheckoutFormData } from "../validations/checkoutSchema";
 
 const Checkout: React.FC = () => {
     const { cartItems, cartTotal, clearCart } = useCart();
-    const navigate = useNavigate();
-    const [formData, setFormData] = useState({
-        name: '',
-        address: '',
-        phone: ''
-    });
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [submittedName, setSubmittedName] = useState<string | null>(null);
+    const navigate = useNavigate();
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
-    };
+    const {
+        register,
+        handleSubmit,
+        formState: { errors, isSubmitting },
+    } = useForm<CheckoutFormData>({
+        resolver: zodResolver(checkoutSchema),
+    });
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
 
+    const onSubmit = async (data: CheckoutFormData) => {
         const orderData = {
             deliveryDetails: {
-                name: formData.name,
-                address: formData.address,
-                phoneNumber: Number(formData.phone.replace(/\D/g, ''))  
+                name: data.name.trim(),
+                address: data.address.trim(),
+                phoneNumber: Number(data.phone.replace(/\D/g, ""))
             },
-            items: cartItems.map(item => ({
+            items: cartItems.map((item) => ({
                 menuItemId: item.id,
-                quantity: item.quantity
+                quantity: item.quantity,
             })),
-            totalAmount: cartTotal
+            totalAmount: cartTotal,
         };
 
         try {
             const createdOrder = await createOrder(orderData);
             localStorage.setItem('orderId', createdOrder._id)
-
+            setSubmittedName(data.name);
             setIsSubmitted(true);
             setTimeout(() => {
                 clearCart();
@@ -58,7 +60,7 @@ const Checkout: React.FC = () => {
                     </svg>
                 </div>
                 <h2 className="text-2xl font-bold text-slate-900 mb-2">Order Successful!</h2>
-                <p className="text-slate-500 mb-6">Thank you, {formData.name}. Your food is being prepared.</p>
+                <p className="text-slate-500 mb-6">Thank you, {submittedName}. Your food is being prepared.</p>
                 <div className="space-y-3">
                     <p className="text-sm text-slate-400">Redirecting to order tracking...</p>
                     <div className="flex justify-center">
@@ -103,48 +105,59 @@ const Checkout: React.FC = () => {
                 {/* Delivery Form */}
                 <div className="bg-white p-8 rounded-3xl shadow-xl border border-slate-50">
                     <h2 className="text-2xl font-bold text-slate-900 mb-8">Delivery Details</h2>
-                    <form onSubmit={handleSubmit} className="space-y-6">
+                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                         <div>
                             <label className="block text-sm font-semibold text-slate-700 mb-2">Full Name</label>
                             <input
-                                required
-                                type="text"
-                                name="name"
-                                value={formData.name}
-                                onChange={handleChange}
+                                {...register("name")}
                                 placeholder="John Doe"
-                                className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+                                className={`w-full px-4 py-3 rounded-xl border ${errors.name ? "border-red-500" : "border-slate-200"
+                                    }`}
                             />
+                            {errors.name && (
+                                <p className="text-red-500 text-sm mt-1">
+                                    {errors.name.message}
+                                </p>
+                            )}
                         </div>
                         <div>
                             <label className="block text-sm font-semibold text-slate-700 mb-2">Delivery Address</label>
                             <textarea
-                                required
-                                name="address"
-                                value={formData.address}
-                                onChange={handleChange}
-                                placeholder="123 Street Name, City"
+                                {...register("address")}
                                 rows={3}
-                                className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+                                placeholder="123 Street Name, City"
+                                className={`w-full px-4 py-3 rounded-xl border ${errors.address ? "border-red-500" : "border-slate-200"
+                                    }`}
                             />
+                            {errors.address && (
+                                <p className="text-red-500 text-sm mt-1">
+                                    {errors.address.message}
+                                </p>
+                            )}
                         </div>
                         <div>
                             <label className="block text-sm font-semibold text-slate-700 mb-2">Phone Number</label>
                             <input
-                                required
                                 type="tel"
-                                name="phone"
-                                value={formData.phone}
-                                onChange={handleChange}
+                                {...register("phone")}
                                 placeholder="+1 234 567 890"
-                                className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+                                className={`w-full px-4 py-3 rounded-xl border ${errors.phone ? "border-red-500" : "border-slate-200"
+                                    }`}
                             />
+                            {errors.phone && (
+                                <p className="text-red-500 text-sm mt-1">
+                                    {errors.phone.message}
+                                </p>
+                            )}
                         </div>
                         <button
                             type="submit"
-                            className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 rounded-xl shadow-lg shadow-orange-200 transition-all duration-300 active:scale-[0.98] mt-4"
+                            disabled={isSubmitting}
+                            className="w-full bg-orange-500 disabled:opacity-50 disabled:cursor-not-allowed ..."
                         >
-                            Place Order (${cartTotal.toFixed(2)})
+                            {isSubmitting
+                                ? "Placing Order..."
+                                : `Place Order (₹${cartTotal})`}
                         </button>
                     </form>
                 </div>
@@ -158,13 +171,13 @@ const Checkout: React.FC = () => {
                                 <span className="text-slate-600">
                                     <span className="font-bold text-slate-800">{item.quantity}x</span> {item.name}
                                 </span>
-                                <span className="font-bold text-slate-900">${(item.price * item.quantity).toFixed(2)}</span>
+                                <span className="font-bold text-slate-900">₹{item.price * item.quantity}</span>
                             </div>
                         ))}
                     </div>
                     <div className="border-t border-slate-200 pt-4 flex justify-between items-center">
                         <span className="text-lg font-bold text-slate-900">Total</span>
-                        <span className="text-2xl font-black text-orange-500">${cartTotal.toFixed(2)}</span>
+                        <span className="text-2xl font-black text-orange-500">₹{cartTotal}</span>
                     </div>
                 </div>
             </div>

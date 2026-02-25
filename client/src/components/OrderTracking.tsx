@@ -112,8 +112,8 @@ const OrderTracking: React.FC = () => {
                                 <div key={index} className="flex flex-col items-center">
                                     <div
                                         className={`w-12 h-12 rounded-full flex items-center justify-center text-xl mb-4 transition-all duration-500 ${index <= currentStep
-                                                ? 'bg-orange-500 text-white shadow-lg shadow-orange-200 scale-110'
-                                                : 'bg-white text-slate-400 border-4 border-slate-100'
+                                            ? 'bg-orange-500 text-white shadow-lg shadow-orange-200 scale-110'
+                                            : 'bg-white text-slate-400 border-4 border-slate-100'
                                             }`}
                                     >
                                         {step.icon}
@@ -159,7 +159,7 @@ const OrderTracking: React.FC = () => {
                                 </div>
                                 <div className="flex justify-between items-center pt-2 border-t border-slate-200 mt-2">
                                     <span className="text-slate-600">Total Amount</span>
-                                    <span className="text-xl font-black text-slate-900">${order.totalAmount.toFixed(2)}</span>
+                                    <span className="text-xl font-black text-slate-900">₹{order.totalAmount}</span>
                                 </div>
                             </div>
                         </div>

@@ -2,17 +2,15 @@
 import type { IOrder } from "../interfaces/entities/orderInterface.js";
 import type { IOrderService } from "../interfaces/serviceInterfaces/IOrderService.js";
 import Order from "../models/orderModel.js";
+import type { CreateOrderInput } from "../schemas/orderSchema.js";
 
 export class OrderService implements IOrderService {
     constructor(){}
 
-    async createOrder(orderData: any): Promise<IOrder> {
+    async createOrder(orderData: CreateOrderInput): Promise<IOrder> {
         const order = new Order(orderData);
         const savedOrder = await order.save();
-
-        // Simulate status updates
         this.simulateStatusUpdates(savedOrder._id.toString());
-
         return savedOrder;
     }
 
