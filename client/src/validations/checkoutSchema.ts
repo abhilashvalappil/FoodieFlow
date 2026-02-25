@@ -13,12 +13,8 @@ export const checkoutSchema = z.object({
     .min(10, "Address seems too short"),
 
   phone: z
-    .string()
-    .min(1, "Phone number is required")
-    .refine(
-      (val) => val.replace(/\D/g, "").length >= 10,
-      "Phone number must be at least 10 digits"
-    ),
+  .string()
+  .regex(/^[6-9]\d{9}$/, "Enter a valid 10-digit mobile number"),
 });
 
 export type CheckoutFormData = z.infer<typeof checkoutSchema>;
